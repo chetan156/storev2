@@ -1,0 +1,27 @@
+﻿@model storev2.Models.CompanyMaster
+
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+@using (Html.BeginForm("Create","Company",FormMethod.Post,new { id = "frmAddCompany" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-md-6">
+            <label>Company Name</label>
+        </div>
+        <div class="col-md-6">
+            @Html.TextBoxFor(model=>model.CompanyName,new  {id="txtCompanyName", @class="form-control" })
+            @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    
+   
+}
+

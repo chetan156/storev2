@@ -1,0 +1,206 @@
+﻿@model IEnumerable<storev2.Models.CompanyMaster>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Scripts/dataTables.bootstrap.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.js"></script>
+
+<script type="text/javascript">
+
+    function DeleteCompany(id) {
+        debugger;
+        var isDelete = confirm("Are you sure to delete record");
+        if (isDelete == true) {
+            debugger;
+            $.ajax({
+                type: "GET",
+                url: "/Company/Delete/" + id,
+                contentType: false,
+                processData: false,
+                data: "",
+                success: function (results) {
+                    debugger;
+                    if (results == "Success") {
+                        alert("Data has been deleted");
+                        var oTable = $("#tblCompanyList").dataTable();
+                        oTable.fnFilter("0", "0");
+                    }
+                   // getList();
+                }
+            });
+        }
+
+    }
+    function EditCompany(id) {
+        debugger;
+        $.ajax({
+            type: "GET",
+            url: "/Company/Edit/" + id,
+            contentType: false,
+            processData: false,
+            data: "",
+            beforeSend: function () {
+                debugger;
+                $("#divEditCompanyPartial").html("Loading");
+            },
+            success: function (results) {
+                debugger;
+                $("#divEditCompanyPartial").html(results);
+            }
+        });
+    }
+    
+    $(document).ready(function () {
+        //debugger;
+        //if (Session["UserType"] == "Company")
+        //{
+        //    $("#BtnAddCompany").hide();
+        //}
+
+       // getList();
+
+
+        $("#BtnAddCompany").click(function () {
+            debugger;
+            $.ajax({
+                type: "GET",
+                url: "/Company/Create/",
+                contentType: false,
+                processData: false,
+                data: "",
+                beforeSend: function () {
+                    debugger;
+                    $("#divAddCompanyPartial").html("Loading");
+                },
+                success: function (results) {
+                    debugger;
+                    $("#divAddCompanyPartial").html(results);
+
+                }
+            });
+
+        });
+
+        $("#btnSaveCompany").click(function () {
+
+            debugger;
+            var frm = $("#frmAddCompany");
+            debugger;
+            if (frm.valid()) {
+                debugger;
+                $.ajax({
+                    url: "/Company/Create/",
+                   // url: frm.attr('action'),
+                    type: 'post',
+                    data: frm.serialize(),
+                    success: function (data, textStatus, xhr) {
+                        $("#divAddCompanyMsg").html("<div class='alert alert-success' role='alert'>Company Entry has been Saved!</div>");
+                        $("#divAddCompanyMsg").show();
+                        $("#divAddCompanyMsg").delay(2000).slideUp(200, function () {
+                            $("#divAddCompanyMsg").hide();
+                            $("#AddCompanyModal").modal("hide");
+                            var oTable = $("#tblCompanyList").dataTable();
+                            oTable.fnFilter("0", "0");
+                        });
+                    },
+                    error: function (data) {
+                        $("#divAddCompanyMsg").html("<div class='alert alert-danger' role='alert'><strong>Error!</strong> Server Error Occur!</div>");
+                        $("#divAddCompanyMsg").show();
+                        $("#divAddCompanyMsg").delay(2000).slideUp(200, function () {
+                            $("#divAddCompanyMsg").hide();
+                        });
+                    }
+
+                });
+            }
+        });
+        $("#btnUpdateCompany").click(function () {
+
+            debugger;
+            var frm = $("#frmEditCompany");
+            debugger;
+            if (frm.valid()) {
+                debugger;
+                $.ajax({
+                    ///url: "/School/edit/",
+                    url: frm.attr('action'),
+                    type: 'post',
+                    data: frm.serialize(),
+                    success: function (data, textStatus, xhr) {
+                        $("#divEditCompanyMsg").html("<div class='alert alert-success' role='alert'>Company Entry has been Update!</div>");
+                        $("#divEditCompanyMsg").show();
+                        $("#divEditCompanyMsg").delay(2000).slideUp(200, function () {
+                            $("#divEditCompanyMsg").hide();
+                            $("#EditCompanyModal").modal("hide");
+                            var oTable = $("#tblCompanyList").dataTable();
+                            oTable.fnFilter("0", "0");
+                        });
+                    },
+                    error: function (data) {
+                        $("#divEditCompanyMsg").html("<div class='alert alert-danger' role='alert'><strong>Error!</strong> Server Error Occur!</div>");
+                        $("#divEditCompanyMsg").show();
+                        $("#divEditCompanyMsg").delay(2000).slideUp(200, function () {
+                            $("#divEditCompanyMsg").hide();
+                        });
+                    }
+
+                });
+            }
+        });
+    });
+</script>
+<div style="padding-top:60px"></div>
+<div>
+    <input type="button" id="BtnAddCompany" class="btn btn-primary" data-toggle="modal" data-target="#AddCompanyModal" value="Add Company" />
+</div>
+
+
+
+<div class="table-responsive" id="divList" style="padding-top:10px">
+    @Html.Partial("CompanyList")
+
+</div>
+
+<div class="modal fade" id="AddCompanyModal" tabindex="-1" role="dialog" backdrop="true" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Add Company</h4>
+            </div>
+            <div class="modal-body">
+                <div id="divAddCompanyPartial">
+
+                </div>
+                <div id="divAddCompanyMsg" style="display:none;"></div>
+                <div class="modal-footer">
+                    <button type="button" id="btnSaveCompany" class="btn btn-primary">Submit</button>
+                    <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="EditCompanyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Edit Company</h4>
+            </div>
+            <div class="modal-body">
+                <div id="divEditCompanyPartial">
+
+                </div>
+                <div id="divEditCompanyMsg" style="display:none;"></div>
+                <div class="modal-footer">
+                    <button type="button" id="btnUpdateCompany" class="btn btn-primary">Submit</button>
+                    <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
