@@ -10,7 +10,7 @@ namespace storev2.Controllers
 {
     public class CompanyController : Controller
     {
-        storev2DbContext _db = new storev2DbContext();
+        StoreDbContext _db = new StoreDbContext();
         // GET: Company
         public ActionResult Index()
         {

@@ -7,12 +7,12 @@ using System.Web;
 
 namespace storev2.Models
 {
-    [Table("CompanyMaster")]
+    [Table("Company")]
     public class CompanyMaster
     {
         public CompanyMaster()
         {
-            this.CategoryMasters = new HashSet<CategoryMaster>();
+            this.CatagoryMasters = new HashSet<CatagoryMaster>();
             this.ModelMasters = new HashSet<ModelMaster>();
         }
         [Key]
@@ -21,7 +21,7 @@ namespace storev2.Models
         [Required(ErrorMessage ="Please Enter Company Name")]
         public string CompanyName { get; set; }
 
-        public virtual ICollection<CategoryMaster> CategoryMasters { get; set; }
+        public virtual ICollection<CatagoryMaster> CatagoryMasters { get; set; }
         public virtual ICollection<ModelMaster> ModelMasters { get; set; }
     }
     public enum Company

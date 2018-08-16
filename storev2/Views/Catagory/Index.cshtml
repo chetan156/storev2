@@ -1,0 +1,219 @@
+﻿@model IEnumerable<storev2.Models.CatagoryMaster>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Scripts/dataTables.bootstrap.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.js"></script>
+
+<script type="text/javascript">
+    
+    function EditCatagoryList(id) {
+        debugger;
+        $.ajax({
+            type: "GET",
+            url: "/Catagory/Edit/" + id,
+            contentType: false,
+            processData: false,
+            data: "",
+            beforeSend: function () {
+                debugger;
+                $("#divEditCatagoryPartial").html("Loading");
+            },
+            success: function (results) {
+                debugger;
+                $("#divEditCatagoryPartial").html(results);
+            }
+        });
+    }
+    function DeleteCatagoryList(id) {
+        debugger;
+        var isDelete = confirm("Are you sure to delete record");
+        if (isDelete == true) {
+            debugger;
+            $.ajax({
+                type: "GET",
+                url: "/Catagory/Delete/" + id,
+                contentType: false,
+                processData: false,
+                data: "",
+                success: function (results) {
+                    debugger;
+                    if (results == "Success") {
+                        alert("Data has been deleted");
+                    }
+                    // getList();
+                    var oTable = $("#tblCatagoryList").dataTable();
+                    oTable.fnFilter("0", "0");
+                }
+            });
+        }
+
+    }
+    $(document).ready(function () {
+       
+
+        //getList();
+        $("#BtnAddCatagory").click(function () {
+            debugger;
+            $.ajax({
+                type: "GET",
+                url: "/Catagory/Create/",
+                contentType: false,
+                processData: false,
+                data: "",
+                beforeSend: function () {
+                    debugger;
+                    $("#divAddCatagoryPartial").html("Loading");
+                },
+                success: function (results) {
+                    debugger;
+                    $("#divAddCatagoryPartial").html(results);
+
+                }
+            });
+
+        });
+        $("#btnSaveCatagory").click(function () {
+
+            debugger;
+            var frm = $("#frmAddCatagory");
+            debugger;
+            if (frm.valid()) {
+                debugger;
+                $.ajax({
+                    url: "/Catagory/Create/",
+                    // url: frm.attr('action'),
+                    type: 'post',
+                    data: frm.serialize(),
+                    success: function (data, textStatus, xhr) {
+                        $("#divAddCatagoryMsg").html("<div class='alert alert-success' role='alert'>Catagory Entry has been Saved!</div>");
+                        $("#divAddCatagoryMsg").show();
+                        $("#divAddCatagoryMsg").delay(2000).slideUp(200, function () {
+                            $("#divAddCatagoryMsg").hide();
+                            $("#AddCatagoryModal").modal("hide");
+                            // getList();
+                            var oTable = $("#tblCatagoryList").dataTable();
+                            oTable.fnFilter("0", "0");
+
+                        });
+                    },
+                    error: function (data) {
+                        $("#divAddCatagoryMsg").html("<div class='alert alert-danger' role='alert'><strong>Error!</strong> Server Error Occur!</div>");
+                        $("#divAddCatagoryMsg").show();
+                        $("#divAddCatagoryMsg").delay(2000).slideUp(200, function () {
+                            $("#divAddCatagoryMsg").hide();
+                        });
+                    }
+
+                });
+            }
+        });
+        $("#btnUpdateCatagory").click(function () {
+
+            debugger;
+            var frm = $("#frmEditCatagory");
+            debugger;
+            if (frm.valid()) {
+                debugger;
+                $.ajax({
+                    ///url: "/School/edit/",
+                    url: frm.attr('action'),
+                    type: 'post',
+                    data: frm.serialize(),
+                    success: function (data, textStatus, xhr) {
+                        $("#divEditCatagoryMsg").html("<div class='alert alert-success' role='alert'>Catagory Entry has been Update!</div>");
+                        $("#divEditCatagoryMsg").show();
+                        $("#divEditCatagoryMsg").delay(2000).slideUp(200, function () {
+                            $("#divEditCatagoryMsg").hide();
+                            $("#EditCatagoryModal").modal("hide");
+                            // getList();
+                            var oTable = $("#tblCatagoryList").dataTable();
+                            oTable.fnFilter("0", "0");
+
+                        });
+                    },
+                    error: function (data) {
+                        $("#divEditCatagoryMsg").html("<div class='alert alert-danger' role='alert'><strong>Error!</strong> Server Error Occur!</div>");
+                        $("#divEditCatagoryMsg").show();
+                        $("#divEditCatagoryMsg").delay(2000).slideUp(200, function () {
+                            $("#divEditCatagoryMsg").hide();
+                        });
+                    }
+
+                });
+            }
+        });
+
+
+       
+    });
+</script>
+
+<div style="padding-top:50px"></div>
+<div>
+    <input type="button" id="BtnAddCatagory" class="btn btn-primary" data-toggle="modal" data-target="#AddCatagoryModal" value="Add Catagory" />
+</div>
+<div class="row" style="padding-top:10px;padding-bottom:10px">
+    <div class="col-md-3">
+        <input type="text" name="searchCatagoryName" id="txtSearchCatagoryName" class="form-control" placeholder="Search By Catagory " />
+    </div>
+
+    <div class="col-md-3">
+        <input type="text" name="searchCompanyName" id="txtSearchCompanyName" class="form-control" placeholder="Search By Company" />
+    </div>
+    <div class="col-md-3">
+        <input type="button" id="btnSearch" class="btn btn-primary" value="Search" />
+    </div>
+
+
+</div>
+
+<div class="table-responsive" id="divList">
+
+    @Html.Partial("CatagoryList2")
+
+
+</div>
+<div class="modal fade" id="AddCatagoryModal" tabindex="-1" role="dialog" backdrop="true" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Add Catagory</h4>
+            </div>
+            <div class="modal-body">
+                <div id="divAddCatagoryPartial">
+
+                </div>
+                <div id="divAddCatagoryMsg" style="display:none;"></div>
+                <div class="modal-footer">
+                    <button type="button" id="btnSaveCatagory" class="btn btn-primary">Submit</button>
+                    <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="EditCatagoryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Edit Catagory</h4>
+            </div>
+            <div class="modal-body">
+                <div id="divEditCatagoryPartial">
+
+                </div>
+                <div id="divEditCatagoryMsg" style="display:none;"></div>
+                <div class="modal-footer">
+                    <button type="button" id="btnUpdateCatagory" class="btn btn-primary">Submit</button>
+                    <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

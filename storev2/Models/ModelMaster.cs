@@ -18,12 +18,12 @@ namespace storev2.Models
         [ForeignKey("CompanyMaster")]
         [Required(ErrorMessage ="Please Select Company Name")]
         public int CompanyId { get; set; }
-        [ForeignKey("CategoryMaster")]
+        [ForeignKey("CatagoryMaster")]
         [Required(ErrorMessage = "Please Select Category Name")]
         public int CategoryId { get; set; }
 
         public virtual CompanyMaster CompanyMaster { get; set; }
-        public virtual CategoryMaster CategoryMaster { get; set; }
+        public virtual CatagoryMaster CatagoryMaster { get; set; }
     }
     public enum Model
     {

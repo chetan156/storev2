@@ -1,0 +1,36 @@
+﻿@model storev2.Models.CatagoryMaster
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = null;
+}
+
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+
+@using (Html.BeginForm("Edit", "Catagory", FormMethod.Post, new { id = "frmEditCatagory" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <label>Catagory Name</label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.CatagoryName, new { id = "txtCatagoryName", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CatagoryName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-3">
+                <label>Company Name</label>
+            </div>
+            <div class="col-md-6">
+                @Html.DropDownList("CompanyId", (IEnumerable<SelectListItem>)ViewBag.Companylist, "Select Company", new { @class = "form-control", id = "dpdlSelectCompany" })
+                @Html.ValidationMessageFor(model => model.CompanyId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+}
