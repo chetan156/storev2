@@ -1,0 +1,216 @@
+﻿@model IEnumerable<storev2.Models.ModelMaster>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Scripts/dataTables.bootstrap.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.js"></script>
+
+<script type="text/javascript">
+
+    function DeleteModel(id) {
+        debugger;
+        var isDelete = confirm("Are you sure to delete record");
+        if (isDelete == true) {
+            debugger;
+            $.ajax({
+                type: "GET",
+                url: "/Model/Delete/" + id,
+                contentType: false,
+                processData: false,
+                data: "",
+                success: function (results) {
+                    debugger;
+                    if (results == "Success") {
+                        alert("Data has been deleted");
+                        var oTable = $("#tblModelList").dataTable();
+                        oTable.fnFilter("0", "0");
+                    }
+                   // getList();
+                }
+            });
+        }
+
+    }
+    function EditModel(id) {
+        debugger;
+        $.ajax({
+            type: "GET",
+            url: "/Model/Edit/" + id,
+            contentType: false,
+            processData: false,
+            data: "",
+            beforeSend: function () {
+                debugger;
+                $("#divEditModelPartial").html("Loading");
+            },
+            success: function (results) {
+                debugger;
+                $("#divEditModelPartial").html(results);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        //debugger;
+        //if (Session["UserType"] == "Model")
+        //{
+        //    $("#BtnAddModel").hide();
+        //}
+
+       // getList();
+
+
+        $("#BtnAddModel").click(function () {
+            debugger;
+            $.ajax({
+                type: "GET",
+                url: "/Model/Create/",
+                contentType: false,
+                processData: false,
+                data: "",
+                beforeSend: function () {
+                    debugger;
+                    $("#divAddModelPartial").html("Loading");
+                },
+                success: function (results) {
+                    debugger;
+                    $("#divAddModelPartial").html(results);
+
+                }
+            });
+
+        });
+
+        $("#btnSaveModel").click(function () {
+
+            debugger;
+            var frm = $("#frmAddModel");
+            debugger;
+            if (frm.valid()) {
+                debugger;
+                $.ajax({
+                    url: "/Model/Create/",
+                   // url: frm.attr('action'),
+                    type: 'post',
+                    data: frm.serialize(),
+                    success: function (data, textStatus, xhr) {
+                        $("#divAddModelMsg").html("<div class='alert alert-success' role='alert'>Model Entry has been Saved!</div>");
+                        $("#divAddModelMsg").show();
+                        $("#divAddModelMsg").delay(2000).slideUp(200, function () {
+                            $("#divAddModelMsg").hide();
+                            $("#AddModelModal").modal("hide");
+                            var oTable = $("#tblModelList").dataTable();
+                            oTable.fnFilter("0", "0");
+                        });
+                    },
+                    error: function (data) {
+                        $("#divAddModelMsg").html("<div class='alert alert-danger' role='alert'><strong>Error!</strong> Server Error Occur!</div>");
+                        $("#divAddModelMsg").show();
+                        $("#divAddModelMsg").delay(2000).slideUp(200, function () {
+                            $("#divAddModelMsg").hide();
+                        });
+                    }
+
+                });
+            }
+        });
+        $("#btnUpdateModel").click(function () {
+
+            debugger;
+            var frm = $("#frmEditModel");
+            debugger;
+            if (frm.valid()) {
+                debugger;
+                $.ajax({
+                    ///url: "/School/edit/",
+                    url: frm.attr('action'),
+                    type: 'post',
+                    data: frm.serialize(),
+                    success: function (data, textStatus, xhr) {
+                        $("#divEditModelMsg").html("<div class='alert alert-success' role='alert'>Model Entry has been Update!</div>");
+                        $("#divEditModelMsg").show();
+                        $("#divEditModelMsg").delay(2000).slideUp(200, function () {
+                            $("#divEditModelMsg").hide();
+                            $("#EditModelModal").modal("hide");
+                            var oTable = $("#tblModelList").dataTable();
+                            oTable.fnFilter("0", "0");
+                        });
+                    },
+                    error: function (data) {
+                        $("#divEditModelMsg").html("<div class='alert alert-danger' role='alert'><strong>Error!</strong> Server Error Occur!</div>");
+                        $("#divEditModelMsg").show();
+                        $("#divEditModelMsg").delay(2000).slideUp(200, function () {
+                            $("#divEditModelMsg").hide();
+                        });
+                    }
+
+                });
+            }
+        });
+    });
+</script>
+<div style="padding-top:60px"></div>
+<div>
+    <input type="button" id="BtnAddModel" class="btn btn-primary" data-toggle="modal" data-target="#AddModelModal" value="Add Model" />
+</div>
+
+<div class="row" style="padding-top:10px;padding-bottom:10px">
+    <div class="col-md-3">
+        <input type="text" id="txtSearchCompanyName" class="form-control" placeholder="Search By Company" />
+    </div>
+    <div class="col-md-3">
+        <input type="text" id="txtSearchCatagoryName" class="form-control" placeholder="Search By Category " />
+    </div>  
+    <div class="col-md-3">
+        <input type="button" id="btnSearch" class="btn btn-primary" value="Search" />
+    </div>
+</div>
+
+<div class="table-responsive" id="divList" style="padding-top:10px">
+    @Html.Partial("ModelList")
+
+</div>
+
+<div class="modal fade" id="AddModelModal" tabindex="-1" role="dialog" backdrop="true" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Add Model</h4>
+            </div>
+            <div class="modal-body">
+                <div id="divAddModelPartial">
+
+                </div>
+                <div id="divAddModelMsg" style="display:none;"></div>
+                <div class="modal-footer">
+                    <button type="button" id="btnSaveModel" class="btn btn-primary">Submit</button>
+                    <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="EditModelModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Edit Model</h4>
+            </div>
+            <div class="modal-body">
+                <div id="divEditModelPartial">
+
+                </div>
+                <div id="divEditModelMsg" style="display:none;"></div>
+                <div class="modal-footer">
+                    <button type="button" id="btnUpdateModel" class="btn btn-primary">Submit</button>
+                    <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

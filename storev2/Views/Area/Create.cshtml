@@ -1,0 +1,25 @@
+﻿@model storev2.Models.AreaMaster
+
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+@using (Html.BeginForm("Create", "Area", FormMethod.Post, new { id = "frmAddArea" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-md-6">
+            <label>Area Name</label>
+        </div>
+        <div class="col-md-6">
+            @Html.TextBoxFor(model => model.AreaName, new { id = "txtAreaName", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.AreaName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+}
+

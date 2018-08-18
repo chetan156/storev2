@@ -15,5 +15,8 @@ namespace storev2.Models
         }
         public DbSet<CatagoryMaster> CatagoryMasters { get; set; }
         public DbSet<CompanyMaster> CompanyMasters { get; set; }
+        public DbSet<ModelMaster> ModelMasters { get; set; }
+        public DbSet<AreaMaster> AreaMasters { get; set; }
+        public DbSet<PurchaseMaster> PurchaseMasters { get; set; }
     }
 }

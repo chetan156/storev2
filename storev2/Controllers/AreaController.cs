@@ -8,70 +8,68 @@ using System.Linq.Dynamic;
 
 namespace storev2.Controllers
 {
-    public class CompanyController : Controller
+    public class AreaController : Controller
     {
         StoreDbContext _db = new StoreDbContext();
-        // GET: Company
+        // GET: Area
         public ActionResult Index()
         {
             return View();
         }
-
         public ActionResult Create()
         {
             return View();
         }
         [HttpPost]
-        public ActionResult Create(CompanyMaster oCompanyMaster)
+        public ActionResult Create(AreaMaster oAreaMaster)
         {
-            CompanyMaster _CompanyMaster = new CompanyMaster()
+            AreaMaster _AreaMaster = new AreaMaster()
             {
-                CompanyName= oCompanyMaster.CompanyName
+                AreaName=oAreaMaster.AreaName
             };
-            _db.CompanyMasters.Add(_CompanyMaster);
+            _db.AreaMasters.Add(_AreaMaster);
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
-
         public ActionResult Edit(int id)
         {
-            var editrecord = _db.CompanyMasters.Single(m => m.CompanyId == id);
+            var editrecord = _db.AreaMasters.Single(m => m.AreaId == id);
             return View(editrecord);
         }
         [HttpPost]
-        public ActionResult Edit(int id,CompanyMaster oCompanyMaster)
+        public ActionResult Edit(int id,AreaMaster oAreaMaster)
         {
-            var editrecord = _db.CompanyMasters.Single(m => m.CompanyId == id);
-            editrecord.CompanyName = oCompanyMaster.CompanyName;       
+            var editrecord = _db.AreaMasters.Single(m => m.AreaId == id);
+            editrecord.AreaName = oAreaMaster.AreaName;
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
         public JsonResult Delete(int id)
         {
-            var deleterecord = _db.CompanyMasters.Single(m => m.CompanyId == id);
-            _db.CompanyMasters.Remove(deleterecord);
+            var deleterecord = _db.AreaMasters.Single(m => m.AreaId == id);
+            _db.AreaMasters.Remove(deleterecord);
             _db.SaveChanges();
             return Json("Success",JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult CompanyList(string sEcho, int iDisplayStart, int iDisplayLength)
-        {           
+        public ActionResult AreaList(string sEcho, int iDisplayStart, int iDisplayLength)
+        {
             string sSearchValue = string.Empty;
-            IEnumerable<CompanyMaster> _Type = _db.CompanyMasters; //add model from which list is being called 
+            IEnumerable<AreaMaster> _Type = _db.AreaMasters; //add model from which list is being called 
             sSearchValue = Request["sSearch"];
             var sortdirection = Request["sSortDir_0"];
             var sortColumnIndex = Convert.ToInt32(Request["iSortCol_0"]);
-            Company oMemberOrder = (Company)sortColumnIndex; // create enum in respective model
+            Area oMemberOrder = (Area)sortColumnIndex; // create enum in respective model
             string sSortColumn = oMemberOrder.ToString();
             int totalRecords = 0;
-            var _MemberListing = (from member in _db.CompanyMasters
-                                  where (sSearchValue == "" || member.CompanyName.StartsWith(sSearchValue))                                   
-                                  select member).OrderBy(c => c.CompanyName).AsEnumerable().Select((member, index) => new
+            var _MemberListing = (from member in _db.AreaMasters
+                                  where (sSearchValue == "" || member.AreaName.StartsWith(sSearchValue))
+                                  select member).OrderBy(c => c.AreaName).AsEnumerable().Select((member, index) => new
                                   {
                                       Index = index + 1,
-                                      CompanyId = member.CompanyId,
-                                      CompanyName = member.CompanyName,
-                                    
+                                      AreaId = member.AreaId,
+                                      AreaName = member.AreaName,
+
                                   }).ToList();
 
             if (sSearchValue != null && sSearchValue != "")
@@ -85,10 +83,10 @@ namespace storev2.Controllers
             var _MemberQuery = _MemberListing.AsEnumerable().OrderBy(sSortColumn + " " + sortdirection).Select(member => new[]
                  {
                     member.Index.ToString(),
-                    member.CompanyName,                  
+                    member.AreaName,
 
-                    "<a data-toggle='modal' data-target='#EditCompanyModal'  href='#' onclick='EditCompany("+ member.CompanyId.ToString()+ ")'><i class='glyphicon glyphicon-pencil'></i>Edit</a>",
-                    "<a href='javascript:DeleteCompany("+member.CompanyId.ToString()+ ")'><i class='glyphicon glyphicon-trash'></i>Delete</a>"
+                    "<a data-toggle='modal' data-target='#EditAreaModal'  href='#' onclick='EditArea("+ member.AreaId.ToString()+ ")'><i class='glyphicon glyphicon-pencil'></i>Edit</a>",
+                    "<a href='javascript:DeleteArea("+member.AreaId.ToString()+ ")'><i class='glyphicon glyphicon-trash'></i>Delete</a>"
             }).Skip(iDisplayStart).Take(iDisplayLength);
 
             var _Json_Memberquery = new

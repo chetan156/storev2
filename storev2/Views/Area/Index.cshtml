@@ -1,0 +1,200 @@
+﻿@model IEnumerable<storev2.Models.AreaMaster>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Scripts/dataTables.bootstrap.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.js"></script>
+
+<script type="text/javascript">
+
+    function DeleteArea(id) {
+        debugger;
+        var isDelete = confirm("Are you sure to delete record");
+        if (isDelete == true) {
+            debugger;
+            $.ajax({
+                type: "GET",
+                url: "/Area/Delete/" + id,
+                contentType: false,
+                processData: false,
+                data: "",
+                success: function (results) {
+                    debugger;
+                    if (results == "Success") {
+                        alert("Data has been deleted");
+                        var oTable = $("#tblAreaList").dataTable();
+                        oTable.fnFilter("0", "0");
+                    }
+                   // getList();
+                }
+            });
+        }
+
+    }
+    function EditArea(id) {
+        debugger;
+        $.ajax({
+            type: "GET",
+            url: "/Area/Edit/" + id,
+            contentType: false,
+            processData: false,
+            data: "",
+            beforeSend: function () {
+                debugger;
+                $("#divEditAreaPartial").html("Loading");
+            },
+            success: function (results) {
+                debugger;
+                $("#divEditAreaPartial").html(results);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+
+
+
+        $("#BtnAddArea").click(function () {
+            debugger;
+            $.ajax({
+                type: "GET",
+                url: "/Area/Create/",
+                contentType: false,
+                processData: false,
+                data: "",
+                beforeSend: function () {
+                    debugger;
+                    $("#divAddAreaPartial").html("Loading");
+                },
+                success: function (results) {
+                    debugger;
+                    $("#divAddAreaPartial").html(results);
+
+                }
+            });
+
+        });
+
+        $("#btnSaveArea").click(function () {
+
+            debugger;
+            var frm = $("#frmAddArea");
+            debugger;
+            if (frm.valid()) {
+                debugger;
+                $.ajax({
+                    url: "/Area/Create/",
+                   // url: frm.attr('action'),
+                    type: 'post',
+                    data: frm.serialize(),
+                    success: function (data, textStatus, xhr) {
+                        $("#divAddAreaMsg").html("<div class='alert alert-success' role='alert'>Area Entry has been Saved!</div>");
+                        $("#divAddAreaMsg").show();
+                        $("#divAddAreaMsg").delay(2000).slideUp(200, function () {
+                            $("#divAddAreaMsg").hide();
+                            $("#AddAreaModal").modal("hide");
+                            var oTable = $("#tblAreaList").dataTable();
+                            oTable.fnFilter("0", "0");
+                        });
+                    },
+                    error: function (data) {
+                        $("#divAddAreaMsg").html("<div class='alert alert-danger' role='alert'><strong>Error!</strong> Server Error Occur!</div>");
+                        $("#divAddAreaMsg").show();
+                        $("#divAddAreaMsg").delay(2000).slideUp(200, function () {
+                            $("#divAddAreaMsg").hide();
+                        });
+                    }
+
+                });
+            }
+        });
+        $("#btnUpdateArea").click(function () {
+
+            debugger;
+            var frm = $("#frmEditArea");
+            debugger;
+            if (frm.valid()) {
+                debugger;
+                $.ajax({
+                    ///url: "/School/edit/",
+                    url: frm.attr('action'),
+                    type: 'post',
+                    data: frm.serialize(),
+                    success: function (data, textStatus, xhr) {
+                        $("#divEditAreaMsg").html("<div class='alert alert-success' role='alert'>Area Entry has been Update!</div>");
+                        $("#divEditAreaMsg").show();
+                        $("#divEditAreaMsg").delay(2000).slideUp(200, function () {
+                            $("#divEditAreaMsg").hide();
+                            $("#EditAreaModal").modal("hide");
+                            var oTable = $("#tblAreaList").dataTable();
+                            oTable.fnFilter("0", "0");
+                        });
+                    },
+                    error: function (data) {
+                        $("#divEditAreaMsg").html("<div class='alert alert-danger' role='alert'><strong>Error!</strong> Server Error Occur!</div>");
+                        $("#divEditAreaMsg").show();
+                        $("#divEditAreaMsg").delay(2000).slideUp(200, function () {
+                            $("#divEditAreaMsg").hide();
+                        });
+                    }
+
+                });
+            }
+        });
+    });
+</script>
+<div style="padding-top:60px"></div>
+<div>
+    <input type="button" id="BtnAddArea" class="btn btn-primary" data-toggle="modal" data-target="#AddAreaModal" value="Add Area" />
+</div>
+
+
+
+<div class="table-responsive" id="divList" style="padding-top:10px">
+    @Html.Partial("AreaList")
+
+</div>
+
+<div class="modal fade" id="AddAreaModal" tabindex="-1" role="dialog" backdrop="true" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Add Area</h4>
+            </div>
+            <div class="modal-body">
+                <div id="divAddAreaPartial">
+
+                </div>
+                <div id="divAddAreaMsg" style="display:none;"></div>
+                <div class="modal-footer">
+                    <button type="button" id="btnSaveArea" class="btn btn-primary">Submit</button>
+                    <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="EditAreaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Edit Area</h4>
+            </div>
+            <div class="modal-body">
+                <div id="divEditAreaPartial">
+
+                </div>
+                <div id="divEditAreaMsg" style="display:none;"></div>
+                <div class="modal-footer">
+                    <button type="button" id="btnUpdateArea" class="btn btn-primary">Submit</button>
+                    <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

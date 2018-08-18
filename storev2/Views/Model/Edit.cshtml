@@ -1,0 +1,72 @@
+﻿@model storev2.Models.ModelMaster
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = null;
+}
+
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $("#dpdlSelectCompany").change(function () {
+            var ddlcompany = "#dpdlSelectCompany";
+
+            var url = "@Url.Content("~/Model/GetCategory")";
+            debugger;
+            var ddltarget = "#ddlCategory";
+            debugger;
+            $.getJSON(url, { id: $(ddlcompany).val() }, function (data) {
+                debugger;
+                $(ddltarget).empty();
+                $(ddltarget).append("<option value=''>Select Category</option>");
+                debugger;
+                $.each(data, function (index, optionData) {
+                    debugger;
+                    $(ddltarget).append("<option value='" + optionData.Value + "'>" + optionData.Text + "</option>");
+                });
+                debugger;
+            });
+        });
+
+    });
+</script>
+
+
+
+@using (Html.BeginForm("Edit", "Model", FormMethod.Post, new { id = "frmEditModel" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-md-6">
+            <label>Model Name</label>
+        </div>
+        <div class="col-md-6">
+            @Html.TextBoxFor(model => model.ModelName, new { id = "txtModelName", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.ModelName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row" style="padding-top:10px">
+        <div class="col-md-6">
+            <label>Company Name</label>
+        </div>
+        <div class="col-md-6">
+            @Html.DropDownList("CompanyId", (IEnumerable<SelectListItem>)ViewBag.CompanyList, "Select Company", new { @class = "form-control", id = "dpdlSelectCompany" })
+            @Html.ValidationMessageFor(model => model.CompanyId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row" style="padding-top:10px">
+        <div class="col-md-6">
+            <label>Category Name</label>
+        </div>
+        <div class="col-md-6">
+            @Html.DropDownList("CatagoryId", (IEnumerable<SelectListItem>)ViewBag.CategoryList, "Select Category", new { @class = "form-control", id = "ddlCategory" })
+            @Html.ValidationMessageFor(model => model.CatagoryId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+}
+
+

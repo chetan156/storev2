@@ -7,9 +7,13 @@ using System.Web;
 
 namespace storev2.Models
 {
-    [Table("ModelMaster")]
+    [Table("ElectronicModel")]
     public class ModelMaster
     {
+        public ModelMaster()
+        {
+            this.PurchaseMasters = new HashSet<PurchaseMaster>();
+        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ModelId { get; set; }
@@ -20,10 +24,11 @@ namespace storev2.Models
         public int CompanyId { get; set; }
         [ForeignKey("CatagoryMaster")]
         [Required(ErrorMessage = "Please Select Category Name")]
-        public int CategoryId { get; set; }
+        public int CatagoryId { get; set; }
 
         public virtual CompanyMaster CompanyMaster { get; set; }
         public virtual CatagoryMaster CatagoryMaster { get; set; }
+        public virtual ICollection<PurchaseMaster> PurchaseMasters { get; set; }
     }
     public enum Model
     {
@@ -31,6 +36,6 @@ namespace storev2.Models
         ModelId,
         ModelName,
         CompanyId,
-        CategoryId
+        CatagoryId
     }
 }

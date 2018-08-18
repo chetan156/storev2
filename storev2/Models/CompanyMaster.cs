@@ -14,6 +14,7 @@ namespace storev2.Models
         {
             this.CatagoryMasters = new HashSet<CatagoryMaster>();
             this.ModelMasters = new HashSet<ModelMaster>();
+            this.PurchaseMasters = new HashSet<PurchaseMaster>();
         }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -23,6 +24,7 @@ namespace storev2.Models
 
         public virtual ICollection<CatagoryMaster> CatagoryMasters { get; set; }
         public virtual ICollection<ModelMaster> ModelMasters { get; set; }
+        public virtual ICollection<PurchaseMaster> PurchaseMasters { get; set; }
     }
     public enum Company
     {
