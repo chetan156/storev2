@@ -1,0 +1,173 @@
+﻿@model storev2.Models.CustomerMaster
+
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+
+
+<script>
+    $(function () {
+        $("#dtpCustomerDob").datepicker();
+        $("#dtpCustomerAnnDate").datepicker();   
+    });
+</script>
+
+@using (Html.BeginForm("Create", "Customer", FormMethod.Post, new { id = "frmAddCustomer" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container">
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-5">
+                <label>Customer Name</label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.CustomerName, new { id = "txtCustomerName", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-5">
+                <label>Customer Address</label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.CustomerAddress, new { id = "txtCustomerAddress", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CustomerAddress, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-5">
+                <label>Customer Mobile</label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.CustomerMobile, new { id = "txtCustomerMobile", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CustomerMobile, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-5">
+                <label>Customer AltMobile</label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.CustomerAltMobile, new { id = "txtCustomerAltMobile", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CustomerAltMobile, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-5">
+                <label>Customer Occupation</label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.CustomerOccupation, new { id = "txtCustomerOccupation", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CustomerOccupation, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-5">
+                <label>Office No</label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.OfficeNo, new { id = "txtOfficeNo", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.OfficeNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-5">
+                <label>Customer Dob</label>
+            </div>
+            <div class="col-md-6">
+                <input type="text"  name="CustomerDob" id="dtpCustomerDob" class="form-control" placeholder="MM/DD/YYYY" readonly="readonly" />
+                @Html.ValidationMessageFor(m => m.CustomerDob)
+            </div>
+        </div>
+
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-5">
+                <label>Customer AnnDate</label>
+            </div>
+            <div class="col-md-6">
+                <input type="text" name="CustomerAnnDate" id="dtpCustomerAnnDate" class="form-control" placeholder="MM/DD/YYYY" readonly="readonly" />
+                @Html.ValidationMessageFor(m => m.CustomerAnnDate)
+            </div>
+        </div>
+
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-5">
+                <label>Refrence</label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.Refrence, new { id = "txtRefrence", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Refrence, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-5">
+                <label>Customer No</label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.CustomerNo, new { id = "txtCustomerNo", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CustomerNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-5">
+                <label>Area</label>
+            </div>
+            <div class="col-md-6">
+                @Html.DropDownList("AreaId", (IEnumerable<SelectListItem>)ViewBag.AreaList, "Select Area", new { @class = "form-control", id = "dpdlSelectArea" })
+                @Html.ValidationMessageFor(model => model.AreaId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-5">
+                <label>Gurantor Name</label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.GurantorName, new { id = "txtGurantorName", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.GurantorName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-5">
+                <label>Gurantor No</label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.GurantorNo, new { id = "txtGurantorNo", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.GurantorNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-5">
+                <label>Gurantor Mobile Number</label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.GurantorContatNo, new { id = "txtGurantorContatNo", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.GurantorContatNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-5">
+                <label>Pin</label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.Pin, new { id = "txtPin", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Pin, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+}

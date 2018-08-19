@@ -1,0 +1,98 @@
+﻿
+
+
+@{
+    Layout = null;
+}
+
+@*<script src="~/Scripts/dataTables/jquery.dataTables.js"></script>*@
+
+<style type="text/css">
+    #tbStudentList_length {
+        text-align: left !important;
+    }
+
+    .tb-right {
+        text-align: right;
+    }
+
+    #tbStudentList_filter {
+        text-align: right;
+    }
+
+    #tbStudentList_processing {
+        position: center;
+        color: blue;
+        padding-left: 20px;
+    }
+
+
+    .dataTables_processing {
+        padding-left: 20px !important;
+    }
+
+    #tbStudentList_paginate {
+        padding-top: 10px;
+    }
+
+
+    /*#tbStudentList_filter input {
+
+    text-transform:uppercase;
+
+    }*/
+</style>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        debugger;
+        var oTable = $("#tblCustomerList").dataTable({
+            "bFilter": true,
+            "bProcessing": true,
+            "bServerSide": true,
+            "aaSorting": [[0, "asc"]],
+            "sAjaxSource": "/Customer/CustomerList?customername=&areaname=&gurantorname=",
+            "aoColumns": [
+                        { "Name": "Index", "sWidth": "10px" },
+                        { "Name": "CustomerName" },
+                        { "Name": "AreaName" },
+                         { "Name": "GurantorName" },
+
+                        { "Name": "Id", "bSearchable": false, "bSortable": false, "fnRender": function (oObj) { return oObj.aData[4] } },
+                        { "Name": "Id", "bSearchable": false, "bSortable": false, "fnRender": function (oObj) { return oObj.aData[5] } }
+            ]
+        });
+        $("#btnSearch").click(function () {
+            var oSettings = oTable.fnSettings();
+            oSettings.sAjaxSource = "/Customer/CustomerList?customername=" + $("#txtSearchCustomerName").val()
+                + "&areaname=" + $("#txtSearchAreaName").val()
+                + "&gurantorname=" + $("#txtSearchGurantorName").val()
+            oTable.fnFilter("0", "0")
+        });
+    });
+</script>
+
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover" id="tblCustomerList">
+        <thead>
+            <tr class="table-header" style="background-color: #0376bf; color: white">
+                <th>Sr</th>
+                <th> Customer </th>
+                <th>Area</th>
+                <th>Gurantor</th>
+
+                <th>Action</th>
+                <th>Action</th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+
+    </table>
+</div>
+
+
+

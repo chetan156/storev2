@@ -1,0 +1,55 @@
+﻿@model storev2.Models.ExecutiveInfo
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = null;
+}
+
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+@using (Html.BeginForm("Edit", "Executive", FormMethod.Post, new { id = "frmEditExecutive" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="container">
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-4">
+                <label> Name</label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.ExecutiveName, new { id = "txtExecutiveName", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ExecutiveName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-4">
+                <label>Contact Number</label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.ExecutiveContactNo, new { id = "txtExecutiveContactNo", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ExecutiveContactNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-4">
+                <label>Address</label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.ExecutiveAddress, new { id = "txtExecutiveAddress", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ExecutiveAddress, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row" style="padding-top:10px">
+            <div class="col-md-4">
+                <label>Alternate Number</label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.ExecutiveALtNo, new { id = "txtExecutiveALtNo", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ExecutiveALtNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+    </div>
+
+}

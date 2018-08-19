@@ -1,0 +1,218 @@
+﻿@model IEnumerable<storev2.Models.CustomerMaster>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Scripts/dataTables.bootstrap.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.js"></script>
+
+<script type="text/javascript">
+
+    function EditCustomerList(id) {
+        debugger;
+        $.ajax({
+            type: "GET",
+            url: "/Customer/Edit/" + id,
+            contentType: false,
+            processData: false,
+            data: "",
+            beforeSend: function () {
+                debugger;
+                $("#divEditCustomerPartial").html("Loading");
+            },
+            success: function (results) {
+                debugger;
+                $("#divEditCustomerPartial").html(results);
+            }
+        });
+    }
+    function DeleteCustomerList(id) {
+        debugger;
+        var isDelete = confirm("Are you sure to delete record");
+        if (isDelete == true) {
+            debugger;
+            $.ajax({
+                type: "GET",
+                url: "/Customer/Delete/" + id,
+                contentType: false,
+                processData: false,
+                data: "",
+                success: function (results) {
+                    debugger;
+                    if (results == "Success") {
+                        alert("Data has been deleted");
+                    }
+                    // getList();
+                    var oTable = $("#tblCustomerList").dataTable();
+                    oTable.fnFilter("0", "0");
+                }
+            });
+        }
+
+    }
+    $(document).ready(function () {
+
+
+        //getList();
+        $("#BtnAddCustomer").click(function () {
+            debugger;
+            $.ajax({
+                type: "GET",
+                url: "/Customer/Create/",
+                contentType: false,
+                processData: false,
+                data: "",
+                beforeSend: function () {
+                    debugger;
+                    $("#divAddCustomerPartial").html("Loading");
+                },
+                success: function (results) {
+                    debugger;
+                    $("#divAddCustomerPartial").html(results);
+
+                }
+            });
+
+        });
+        $("#btnSaveCustomer").click(function () {
+
+            debugger;
+            var frm = $("#frmAddCustomer");
+            debugger;
+            if (frm.valid()) {
+                debugger;
+                $.ajax({
+                    url: "/Customer/Create/",
+                    // url: frm.attr('action'),
+                    type: 'post',
+                    data: frm.serialize(),
+                    success: function (data, textStatus, xhr) {
+                        $("#divAddCustomerMsg").html("<div class='alert alert-success' role='alert'>Customer Entry has been Saved!</div>");
+                        $("#divAddCustomerMsg").show();
+                        $("#divAddCustomerMsg").delay(2000).slideUp(200, function () {
+                            $("#divAddCustomerMsg").hide();
+                            $("#AddCustomerModal").modal("hide");
+                            // getList();
+                            var oTable = $("#tblCustomerList").dataTable();
+                            oTable.fnFilter("0", "0");
+
+                        });
+                    },
+                    error: function (data) {
+                        $("#divAddCustomerMsg").html("<div class='alert alert-danger' role='alert'><strong>Error!</strong> Server Error Occur!</div>");
+                        $("#divAddCustomerMsg").show();
+                        $("#divAddCustomerMsg").delay(2000).slideUp(200, function () {
+                            $("#divAddCustomerMsg").hide();
+                        });
+                    }
+
+                });
+            }
+        });
+        $("#btnUpdateCustomer").click(function () {
+
+            debugger;
+            var frm = $("#frmEditCustomer");
+            debugger;
+            if (frm.valid()) {
+                debugger;
+                $.ajax({
+                    ///url: "/School/edit/",
+                    url: frm.attr('action'),
+                    type: 'post',
+                    data: frm.serialize(),
+                    success: function (data, textStatus, xhr) {
+                        $("#divEditCustomerMsg").html("<div class='alert alert-success' role='alert'>Customer Entry has been Update!</div>");
+                        $("#divEditCustomerMsg").show();
+                        $("#divEditCustomerMsg").delay(2000).slideUp(200, function () {
+                            $("#divEditCustomerMsg").hide();
+                            $("#EditCustomerModal").modal("hide");
+                            // getList();
+                            var oTable = $("#tblCustomerList").dataTable();
+                            oTable.fnFilter("0", "0");
+
+                        });
+                    },
+                    error: function (data) {
+                        $("#divEditCustomerMsg").html("<div class='alert alert-danger' role='alert'><strong>Error!</strong> Server Error Occur!</div>");
+                        $("#divEditCustomerMsg").show();
+                        $("#divEditCustomerMsg").delay(2000).slideUp(200, function () {
+                            $("#divEditCustomerMsg").hide();
+                        });
+                    }
+
+                });
+            }
+        });
+
+
+
+    });
+</script>
+
+<div style="padding-top:50px"></div>
+<div>
+    <input type="button" id="BtnAddCustomer" class="btn btn-primary" data-toggle="modal" data-target="#AddCustomerModal" value="Add Customer" />
+</div>
+<div class="row" style="padding-top:10px;padding-bottom:10px">
+
+    <div class="col-md-3">
+        <input type="text" name="searchAreaName" id="txtSearchAreaName" class="form-control" placeholder="Search By Area" />
+    </div>
+    <div class="col-md-3">
+        <input type="text" name="searchGurantorName" id="txtSearchGurantorName" class="form-control" placeholder="Search By Gurantor" />
+    </div>
+    <div class="col-md-3">
+        <input type="button" id="btnSearch" class="btn btn-primary" value="Search" />
+    </div>
+
+
+</div>
+
+<div class="table-responsive" id="divList">
+
+    @Html.Partial("CustomerList")
+
+
+</div>
+<div class="modal fade" id="AddCustomerModal" tabindex="-1" role="dialog" backdrop="true" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Add Customer</h4>
+            </div>
+            <div class="modal-body">
+                <div id="divAddCustomerPartial">
+
+                </div>
+                <div id="divAddCustomerMsg" style="display:none;"></div>
+                <div class="modal-footer">
+                    <button type="button" id="btnSaveCustomer" class="btn btn-primary">Submit</button>
+                    <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="EditCustomerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Edit Customer</h4>
+            </div>
+            <div class="modal-body">
+                <div id="divEditCustomerPartial">
+
+                </div>
+                <div id="divEditCustomerMsg" style="display:none;"></div>
+                <div class="modal-footer">
+                    <button type="button" id="btnUpdateCustomer" class="btn btn-primary">Submit</button>
+                    <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
